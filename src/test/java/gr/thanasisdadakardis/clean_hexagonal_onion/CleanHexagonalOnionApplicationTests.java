@@ -1,4 +1,4 @@
-package nl.maikkingma.clean_hexagonal_onion;
+package gr.thanasisdadakardis.clean_hexagonal_onion;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
