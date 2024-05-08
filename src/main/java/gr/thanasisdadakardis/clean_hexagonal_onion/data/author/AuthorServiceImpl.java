@@ -8,8 +8,20 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 public class AuthorServiceImpl implements AuthorService {
+
+    private final AuthorRepository authorRepository;
+
+    public AuthorServiceImpl(AuthorRepository authorRepository) {
+        this.authorRepository = authorRepository;
+    }
+
     @Override
     public void registerAuthor(Author author) {
-        log.info("Registering author: {}", author);
+        var authorJPA = AuthorMapper
+                .mapToJPA(author);
+
+        authorRepository
+                .save(authorJPA);
+        log.info("Registering author: {}", author.getFullName());
     }
 }
