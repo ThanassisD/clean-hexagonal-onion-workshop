@@ -20,8 +20,4 @@ public class Author {
     public static Author createAuthor(String firstName, String lastName) {
         return new Author(null, firstName, lastName);
     }
-
-    public String getFullName() {
-        return firstName + " " + lastName;
-    }
 }

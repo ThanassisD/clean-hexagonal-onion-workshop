@@ -1,15 +1,12 @@
 package gr.thanasisdadakardis.clean_hexagonal_onion.command.author;
 
-import gr.thanasisdadakardis.clean_hexagonal_onion.domain.author.Author;
-import gr.thanasisdadakardis.clean_hexagonal_onion.domain.author.AuthorService;
+import gr.thanasisdadakardis.clean_hexagonal_onion.domaininteraction.author.AuthorFlow;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.assertArg;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -18,7 +15,7 @@ import static org.mockito.Mockito.verify;
 class AuthorCommandsTest {
 
     @Mock
-    private AuthorService authorService;
+    private AuthorFlow authorFlow;
 
     @InjectMocks
     private AuthorCommands authorCommands;
@@ -26,14 +23,11 @@ class AuthorCommandsTest {
     @Test
     void create() {
         //arrange
-        var createAuthorModel = new CreateAuthorModel("Thanasis", "Dadakardis");
+        var createAuthorModel = new CreateAuthorModel("Thanasis", "Dadakaridis");
         //act
         authorCommands.create(createAuthorModel);
         //assert
-        var author = Author
-                .createAuthor(createAuthorModel.firstName(), createAuthorModel.lastName());
-        verify(authorService, times(1)).registerAuthor(assertArg(actual ->
-                assertThat(actual).usingRecursiveComparison().isEqualTo(author)));
+        verify(authorFlow, times(1)).registerAuthorByName("Thanasis", "Dadakaridis");
     }
 
 }

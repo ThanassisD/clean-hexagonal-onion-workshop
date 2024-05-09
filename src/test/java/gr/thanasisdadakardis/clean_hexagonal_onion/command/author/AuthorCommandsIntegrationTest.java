@@ -1,6 +1,11 @@
 package gr.thanasisdadakardis.clean_hexagonal_onion.command.author;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+
+import gr.thanasisdadakardis.clean_hexagonal_onion.data.author.AuthorJPA;
+import gr.thanasisdadakardis.clean_hexagonal_onion.data.author.AuthorRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -8,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -21,17 +27,31 @@ class AuthorCommandsIntegrationTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Test
-    void register()  throws Exception{
+    @Autowired
+    private AuthorRepository authorRepository;
 
-        var createAuthorModel = objectMapper
-                .writeValueAsString(new CreateAuthorModel("Thanasis", "Dadakardis"));
-
-        mockMvc.perform(post("/authors/commands/register")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(createAuthorModel))
-                .andExpect(status().isAccepted());
-
+    @BeforeEach
+    void beforeAll() {
+        authorRepository.deleteAll();
     }
 
+    @Test
+    void registerAndGet() throws Exception {
+        //given
+        var registerAuthorPayloadJson = objectMapper
+                .writeValueAsString(new CreateAuthorModel("Thanasis", "Dadakaridis"));
+        var expected = AuthorJPA.builder()
+                .firstName("Thanasis")
+                .lastName("Dadakaridis")
+                .build();
+        //when
+        mockMvc.perform(post("/authors/commands/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(registerAuthorPayloadJson))
+                .andExpect(status().isAccepted());
+        authorRepository.flush();
+        // then
+        assertThat(authorRepository.findAll().size()).isEqualTo(1);
+        assertThat(authorRepository.findAll().get(0)).usingRecursiveComparison().ignoringFields("id").isEqualTo(expected);
+    }
 }

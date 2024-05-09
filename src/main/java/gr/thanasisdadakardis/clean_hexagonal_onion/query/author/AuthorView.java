@@ -1,9 +1,9 @@
 package gr.thanasisdadakardis.clean_hexagonal_onion.query.author;
 
-import gr.thanasisdadakardis.clean_hexagonal_onion.domain.author.Author;
+import gr.thanasisdadakardis.clean_hexagonal_onion.domaininteraction.author.AuthorDTO;
 
 public record AuthorView (Long id, String name) {
-    public AuthorView(Author author) {
-        this(author.getId(), author.getFullName());
+    public AuthorView(AuthorDTO authorDTO) {
+        this(authorDTO.id(), authorDTO.getFullName());
     }
 }

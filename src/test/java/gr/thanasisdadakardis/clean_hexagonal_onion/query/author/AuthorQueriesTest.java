@@ -1,7 +1,8 @@
 package gr.thanasisdadakardis.clean_hexagonal_onion.query.author;
 
 import gr.thanasisdadakardis.clean_hexagonal_onion.domain.author.Author;
-import gr.thanasisdadakardis.clean_hexagonal_onion.domain.author.AuthorService;
+import gr.thanasisdadakardis.clean_hexagonal_onion.domaininteraction.author.AuthorDTO;
+import gr.thanasisdadakardis.clean_hexagonal_onion.domaininteraction.author.AuthorFlow;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -18,24 +19,24 @@ import static org.mockito.Mockito.*;
 class AuthorQueriesTest {
 
     @Mock
-    private AuthorService authorService;
+    private AuthorFlow authorFlow;
 
     @InjectMocks
     private AuthorQueries authorQueries;
 
     @Test
     void getAll(){
-        List<Author> mockedListAuthorListResponse = List.of(
-                Author.restore()
+        List<AuthorDTO> mockedListAuthorListResponse = List.of(
+                new AuthorDTO(Author.restore()
                         .id(1L)
                         .firstName("Thanasis")
                         .lastName("Dadakardis")
-                        .build()
+                        .build())
         );
-        when(authorService.findAllAuthors())
+        when(authorFlow.getListOfAllAuthors())
                 .thenReturn(mockedListAuthorListResponse);
         List<AuthorView> result = authorQueries.getAllAuthors();
-        verify(authorService, times(1)).findAllAuthors();
+        verify(authorFlow, times(1)).getListOfAllAuthors();
         assertThat(result).containsExactly(new AuthorView(1L, "Thanasis Dadakardis"));
     }
 

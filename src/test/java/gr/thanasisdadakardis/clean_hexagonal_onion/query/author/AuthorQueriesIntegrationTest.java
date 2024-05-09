@@ -2,10 +2,10 @@ package gr.thanasisdadakardis.clean_hexagonal_onion.query.author;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import gr.thanasisdadakardis.clean_hexagonal_onion.domaininteraction.author.AuthorDTO;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import gr.thanasisdadakardis.clean_hexagonal_onion.data.author.AuthorJPA;
-import gr.thanasisdadakardis.clean_hexagonal_onion.domain.author.Author;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +48,7 @@ class AuthorQueriesIntegrationTest {
         var authorJPA = AuthorJPA.builder().firstName("Thanasis").lastName("Dadakaridis").build();
         entityManager.persist(authorJPA);
         entityManager.flush();
-        AuthorView expected = new AuthorView(Author.createAuthor("Thanasis", "Dadakaridis"));
+        var expected = new AuthorView(new AuthorDTO(1L, "Thanasis", "Dadakaridis"));
         // when then
         MvcResult result = mockMvc.perform(get("/authors")
                         .accept(MediaType.APPLICATION_JSON))
