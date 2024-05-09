@@ -5,6 +5,8 @@ import gr.thanasisdadakardis.clean_hexagonal_onion.domain.author.AuthorService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Slf4j
 @Service
 public class AuthorServiceImpl implements AuthorService {
@@ -23,5 +25,15 @@ public class AuthorServiceImpl implements AuthorService {
         authorRepository
                 .save(authorJPA);
         log.info("Registering author: {}", author.getFullName());
+    }
+
+    @Override
+    public List<Author> findAllAuthors() {
+        var authorsJPA = authorRepository
+                .findAll();
+
+        return authorsJPA.stream()
+                .map(AuthorMapper::mapToDomain)
+                .toList();
     }
 }
