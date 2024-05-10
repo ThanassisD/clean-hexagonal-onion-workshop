@@ -6,4 +6,6 @@ public interface AuthorDataService {
     void save(AuthorDTO author);
 
     List<AuthorDTO> findAllAuthors();
+
+    AuthorDTO findById(Long authorId);
 }

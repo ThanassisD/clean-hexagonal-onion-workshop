@@ -1,6 +1,9 @@
 package gr.thanasisdadakardis.clean_hexagonal_onion.domaininteraction.author;
 
 import gr.thanasisdadakardis.clean_hexagonal_onion.domain.author.Author;
+import gr.thanasisdadakardis.clean_hexagonal_onion.domain.book.Genre;
+import gr.thanasisdadakardis.clean_hexagonal_onion.domaininteraction.book.BookDTO;
+import gr.thanasisdadakardis.clean_hexagonal_onion.domaininteraction.book.BookDataService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -9,9 +12,11 @@ import java.util.List;
 public class AuthorFlow {
 
     private final AuthorDataService authorDataService;
+    private final BookDataService bookDataService;
 
-    public AuthorFlow(AuthorDataService authorDataService) {
+    public AuthorFlow(AuthorDataService authorDataService, BookDataService bookDataService) {
         this.authorDataService = authorDataService;
+        this.bookDataService = bookDataService;
     }
 
     public void registerAuthorByName( String firstName, String lastName) {
@@ -21,5 +26,15 @@ public class AuthorFlow {
 
     public List<AuthorDTO> getListOfAllAuthors() {
         return authorDataService.findAllAuthors();
+    }
+
+    public AuthorDTO findById(Long authorId) {
+        return authorDataService.findById(authorId);
+    }
+
+    public void writeManuscript(Long authorId, String title, String genre) {
+        var author = AuthorDomainMapper.mapToDomain(authorDataService.findById(authorId));
+        var book = author.writeManuscript(title, Genre.fromString(genre));
+        bookDataService.save(new BookDTO(book));
     }
 }

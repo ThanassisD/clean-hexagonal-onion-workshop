@@ -34,11 +34,25 @@ public class AuthorDataServiceImpl implements AuthorDataService {
         return authorsJPA.stream()
                 .map(authorJPA ->
                         new AuthorDTO(
-                            authorJPA.getId(),
-                            authorJPA.getFirstName(),
-                            authorJPA.getLastName()
+                                authorJPA.getId(),
+                                authorJPA.getFirstName(),
+                                authorJPA.getLastName()
                         )
                 )
                 .toList();
+    }
+
+    @Override
+    public AuthorDTO findById(Long authorId) {
+        return authorRepository
+                .findById(authorId)
+                .map(authorJPA ->
+                        new AuthorDTO(
+                                authorJPA.getId(),
+                                authorJPA.getFirstName(),
+                                authorJPA.getLastName()
+                        )
+                )
+                .orElseThrow();
     }
 }

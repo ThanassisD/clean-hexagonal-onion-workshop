@@ -1,6 +1,5 @@
 package gr.thanasisdadakardis.clean_hexagonal_onion.command.author;
 
-import gr.thanasisdadakardis.clean_hexagonal_onion.domain.author.Author;
 import gr.thanasisdadakardis.clean_hexagonal_onion.domaininteraction.author.AuthorFlow;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
