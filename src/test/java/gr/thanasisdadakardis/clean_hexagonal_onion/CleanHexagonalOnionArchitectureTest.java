@@ -12,16 +12,17 @@ public class CleanHexagonalOnionArchitectureTest {
     @ArchTest
     static final ArchRule layer_dependencies_are_respected =
             layeredArchitecture().consideringAllDependencies()
-
+                .layer("acl").definedBy("gr.thanasisdadakardis.clean_hexagonal_onion.acl..")
                 .layer("data").definedBy("gr.thanasisdadakardis.clean_hexagonal_onion.data..")
                 .layer("command").definedBy("gr.thanasisdadakardis.clean_hexagonal_onion.command..")
                 .layer("query").definedBy("gr.thanasisdadakardis.clean_hexagonal_onion.query..")
                 .layer("domain interaction").definedBy("gr.thanasisdadakardis.clean_hexagonal_onion.domaininteraction..")
                 .layer("domain").definedBy("gr.thanasisdadakardis.clean_hexagonal_onion.domain..")
 
+                .whereLayer("acl").mayNotBeAccessedByAnyLayer()
                 .whereLayer("command").mayNotBeAccessedByAnyLayer()
                 .whereLayer("query").mayNotBeAccessedByAnyLayer()
                 .whereLayer("data").mayNotBeAccessedByAnyLayer()
-                .whereLayer("domain interaction").mayOnlyBeAccessedByLayers("command", "query", "data")
+                .whereLayer("domain interaction").mayOnlyBeAccessedByLayers("acl","command", "query", "data")
                 .whereLayer("domain").mayOnlyBeAccessedByLayers("domain interaction");
 }
