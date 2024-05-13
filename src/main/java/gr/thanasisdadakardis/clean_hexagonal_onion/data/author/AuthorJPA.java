@@ -16,9 +16,9 @@ import static jakarta.persistence.GenerationType.SEQUENCE;
 public class AuthorJPA {
 
     @Id
-    @Getter
     @GeneratedValue(strategy = SEQUENCE, generator = "author_seq_gen")
     @SequenceGenerator(name = "author_seq_gen", sequenceName = "author_seq", allocationSize = 1)
+    @Getter
     private Long id;
 
     @Getter

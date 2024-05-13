@@ -6,6 +6,7 @@ import gr.thanasisdadakardis.clean_hexagonal_onion.domaininteraction.book.BookDa
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -39,6 +40,13 @@ public class BookDataServiceImpl implements BookDataService {
                 .toList();
     }
 
+    @Override
+    public BookDTO findById(Long bookId) {
+        return bookRepository.findById(bookId)
+                .map(this::fromJPAtoDTO)
+                .orElseThrow(() -> new RuntimeException(String.format("Book with id %d could not be found!", bookId)));
+    }
+
     private BookDTO fromJPAtoDTO(BookJPA bookJPA) {
         var authorJPA = bookJPA.getAuthor();
         return new BookDTO(
@@ -52,7 +60,8 @@ public class BookDataServiceImpl implements BookDataService {
                 bookJPA.getGenre(),
                 bookJPA.getPublisherId(),
                 bookJPA.isPublished(),
-                bookJPA.getIsbn()
+                bookJPA.getIsbn(),
+                new ArrayList<>()
         );
     }
 }
